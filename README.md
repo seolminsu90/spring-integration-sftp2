@@ -5,6 +5,7 @@ simple sftp upload message gateway example
 ### integration 기본구조 볼 겸
 - 1과 다르게 ServiceActivator 및 Channel을 직접활용
 - SftpRemoteFileTemplate가져오지 않고 integration-sftp가 알아서 내부에서 처리하도록 함
+- sftp의 OutboundHandler인 SftpMessageHandler를 이용하여 업로드 구현
 
 ## Message Endpoints 정리 
 - Gateway 비즈니스 로직에서 메시지 송수신을 쉽게 도와주는 컴포넌트 
