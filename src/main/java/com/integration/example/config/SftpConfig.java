@@ -5,6 +5,7 @@ import java.io.File;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.Resource;
 import org.springframework.expression.common.LiteralExpression;
 import org.springframework.integration.annotation.Gateway;
@@ -61,34 +62,38 @@ public class SftpConfig {
     }
 
     @Bean
+    @Order(2)
     @ServiceActivator(inputChannel = "toSftpChannel")
     public MessageHandler fileHandler1() {
-        return m -> System.out.println("저도 구독했어요");
+        return m -> System.out.println("Stream @Order(2)");
     }
 
     @Bean
+    @Order(4)
     @ServiceActivator(inputChannel = "toSftpChannel")
     public MessageHandler fileHandler2() {
         return m -> {
-            System.out.println("저도 구독했는데 헵..파일지울꼐요");
+            System.out.println("Stream @Order(4) - File Delete");
             ((File) m.getPayload()).delete();
         };
     }
 
     @Bean
+    @Order(3)
     @ServiceActivator(inputChannel = "toSftpChannel")
     public MessageHandler fileHandler3() {
-        return m -> System.out.println("저도 구독했어요22");
+        return m -> System.out.println("Stream @Order(3)");
     }
 
     @Bean
+    @Order(1)
     @ServiceActivator(inputChannel = "toSftpChannel")
     public MessageHandler handler() {
         SftpMessageHandler handler = new SftpMessageHandler(sftpSessionFactory());
         handler.setRemoteDirectoryExpression(new LiteralExpression(sftpRemoteDirectory));
         handler.setFileNameGenerator(m -> {
             String fileName = ((File) m.getPayload()).getName();
-            System.out.println("파일이름 : " + fileName);
+            System.out.println("Stream @Order(1) - File Upload " + fileName);
             if (m.getPayload() instanceof File) {
                 return fileName;
             } else {
