@@ -1,5 +1,5 @@
 # spring-integration-sftp
-simple sftp upload message gateway example
+파일 메시지를 수신하여 업로드 처리 하는 기능 구현 
 
 # spring ftp file upload 연습용
 ### integration 기본구조 볼 겸
